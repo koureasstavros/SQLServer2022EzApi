@@ -29,7 +29,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     }
 
     [Serializable]
-    public class ComponentException : Exception 
+    public class ComponentException : Exception
     {
         public ComponentException() : base() { }
         public ComponentException(string message) : base(message) { }
@@ -90,7 +90,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 m_obj.ReinitializeMetaData();
             }
         }
-    }        
+    }
 
     /// <summary>
     /// Class to implement access to columns custom properties as arrays.
@@ -172,11 +172,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         }
     }
 
-	public class EzComponent
-	{
-		protected EzDataFlow m_parent;
-		protected IDTSComponentMetaData100 m_meta;
-		protected IDTSDesigntimeComponent100 m_comp;
+    public class EzComponent
+    {
+        protected EzDataFlow m_parent;
+        protected IDTSComponentMetaData100 m_meta;
+        protected IDTSDesigntimeComponent100 m_comp;
 
         public string GetCompID()
         {
@@ -401,7 +401,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 res = CompareProperty(countprop, origObj, newObj);
                 if (!string.IsNullOrEmpty(res))
                     return string.Format("{0}.{1}", parent.Name, res);
-                
+
                 int count = (int)countprop.GetValue(origObj, null);
                 for (int i = 0; i < count; i++)
                 {
@@ -516,18 +516,18 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public void SetInputColumnProperty(int inputIndex, string columnName, string propertyName, object propertyValue,
             bool reinitMeta)
-		{
-			IDTSInput100 input = m_meta.InputCollection[inputIndex];
-			IDTSInputColumn100 inputColumn = input.InputColumnCollection[columnName];
+        {
+            IDTSInput100 input = m_meta.InputCollection[inputIndex];
+            IDTSInputColumn100 inputColumn = input.InputColumnCollection[columnName];
             m_comp.SetInputColumnProperty(input.ID, inputColumn.ID, propertyName, propertyValue);
             if (reinitMeta)
                 ReinitializeMetaData();
-		}
+        }
 
-		public void SetInputColumnProperty(string columnName, string propertyName, object propertyValue)
-		{
-			SetInputColumnProperty(0,columnName,propertyName,propertyValue);
-		}
+        public void SetInputColumnProperty(string columnName, string propertyName, object propertyValue)
+        {
+            SetInputColumnProperty(0, columnName, propertyName, propertyValue);
+        }
 
         public void SetOutputProperty(string propName, object propValue)
         {
@@ -689,9 +689,9 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             if (cacheValues)
                 foreach (IDTSCustomProperty100 p in input.InputColumnCollection[columnName].CustomPropertyCollection)
                     props[p.Name] = p.Value;
-	        IDTSVirtualInput100 virtualInput = input.GetVirtualInput();
-	        IDTSVirtualInputColumn100 virtualInputColumn = virtualInput.VirtualInputColumnCollection[columnName];
-	        m_comp.SetUsageType(input.ID, virtualInput, virtualInputColumn.LineageID, usageType);
+            IDTSVirtualInput100 virtualInput = input.GetVirtualInput();
+            IDTSVirtualInputColumn100 virtualInputColumn = virtualInput.VirtualInputColumnCollection[columnName];
+            m_comp.SetUsageType(input.ID, virtualInput, virtualInputColumn.LineageID, usageType);
             if (cacheValues)
                 foreach (string key in props.Keys)
                 {
@@ -699,12 +699,12 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                         input.InputColumnCollection[columnName].CustomPropertyCollection[key].Value = props[key];
                 }
             if (initMeta)
-               ReinitializeMetaData();
+                ReinitializeMetaData();
         }
 
         public void SetUsageType(string columnName, DTSUsageType usageType)
         {
-             SetUsageType(0, columnName, usageType);
+            SetUsageType(0, columnName, usageType);
         }
 
         public void SetOutputColumnDataTypeProperties(int outputIndex, string columnName, DataType dataType,
@@ -713,7 +713,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             SetOutputColumnDataTypeProperties(outputIndex, columnName, dataType, length, precision, scale, codePage, true);
         }
 
-        public void SetOutputColumnDataTypeProperties(int outputIndex, string columnName, DataType dataType, 
+        public void SetOutputColumnDataTypeProperties(int outputIndex, string columnName, DataType dataType,
             int length, int precision, int scale, int codePage, bool initMeta)
         {
             IDTSOutput100 output = m_meta.OutputCollection[outputIndex];
@@ -723,7 +723,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 ReinitializeMetaData();
         }
 
-        public void SetOutputColumnDataTypeProperties(string columnName, DataType dataType, int length, int precision, 
+        public void SetOutputColumnDataTypeProperties(string columnName, DataType dataType, int length, int precision,
             int scale, int codePage)
         {
             SetOutputColumnDataTypeProperties(0, columnName, dataType, length, precision, scale, codePage);
@@ -797,15 +797,15 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             m_comp.SetUsageType(input.ID, virtualInput, virtualInputColumn.LineageID, DTSUsageType.UT_READONLY);
         }
 
-        public virtual void ReinitializeMetaDataNoCast() 
+        public virtual void ReinitializeMetaDataNoCast()
         {
             m_comp.ReinitializeMetaData();
         }
-        
-        public bool ValidateExternalMetadata 
-        { 
+
+        public bool ValidateExternalMetadata
+        {
             get { return m_meta.ValidateExternalMetadata; }
-            set { m_meta.ValidateExternalMetadata = value; } 
+            set { m_meta.ValidateExternalMetadata = value; }
         }
 
         public bool UsesDispositions { get { return m_meta.UsesDispositions; } set { m_meta.UsesDispositions = value; } }
@@ -884,7 +884,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public void UnmapAllInputColumns()
         {
-            foreach(IDTSInputColumn100 inputcol in m_meta.InputCollection[0].InputColumnCollection)
+            foreach (IDTSInputColumn100 inputcol in m_meta.InputCollection[0].InputColumnCollection)
             {
                 UnmapColumn(inputcol.Name);
             }
@@ -914,7 +914,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             m_comp.MapOutputColumn(m_meta.OutputCollection[0].ID, OutputCol(outputColName).ID, 0, true);
             if (reinitMeta)
-               ReinitializeMetaData();
+                ReinitializeMetaData();
         }
 
         public object CallDesignTimeMethod(string methodName, object[] methodParams, bool commit)
@@ -928,7 +928,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 view.Cancel();
             return returnVal;
         }
-	}
+    }
 
     public enum AccessMode
     {
@@ -950,15 +950,15 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected EzConnectionManager m_connection;
         public EzConnectionManager Connection
         {
-            get 
-            { 
+            get
+            {
                 if (m_connection == null)
                 {
                     IDTSRuntimeConnection100 rtCnn = m_meta.RuntimeConnectionCollection[0];
                     if (rtCnn != null)
                         m_connection = new EzCacheCM(Parent.Package, Parent.Package.Connections[rtCnn.ConnectionManagerID]);
                 }
-                return m_connection; 
+                return m_connection;
             }
             set
             {
@@ -972,9 +972,9 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public override void ReinitializeMetaDataNoCast()
         {
-            if (m_meta.RuntimeConnectionCollection[0].ConnectionManager == null 
+            if (m_meta.RuntimeConnectionCollection[0].ConnectionManager == null
                || string.IsNullOrEmpty(m_meta.RuntimeConnectionCollection[0].ConnectionManager.ConnectionString)
-               || string.Compare(m_meta.RuntimeConnectionCollection[0].ConnectionManager.ConnectionString, "Provider=Microsoft.Jet.OLEDB.4.0;", true) == 0 )
+               || string.Compare(m_meta.RuntimeConnectionCollection[0].ConnectionManager.ConnectionString, "Provider=Microsoft.Jet.OLEDB.4.0;", true) == 0)
                 return;
             AcquireConnections();
             try
@@ -1005,10 +1005,10 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 LinkInputToOutput(colName);
 
             virtualInput = input.GetVirtualInput();
-           
+
             List<IDTSExternalMetadataColumn100> list = new List<IDTSExternalMetadataColumn100>();
 
-            for(int i = 0; i < extMetadataColumns.Count; i++)
+            for (int i = 0; i < extMetadataColumns.Count; i++)
             {
                 list.Add(extMetadataColumns[i]);
             }
@@ -1032,16 +1032,16 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected EzOleDbAdapter(EzDataFlow dataFlow) : base(dataFlow) { }
         protected EzOleDbAdapter(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
 
-        protected override void VerifyConnection() 
+        protected override void VerifyConnection()
         {
             if (m_connection != null && string.Compare(m_connection.CM.CreationName, "OLEDB", StringComparison.OrdinalIgnoreCase) != 0)
                 throw new IncorrectAssignException(string.Format("Cannot assign {0} connection to EzOleDbAdapter", m_connection.CM.CreationName));
         }
 
-        public AccessMode AccessMode 
+        public AccessMode AccessMode
         {
             get { return (AccessMode)m_meta.CustomPropertyCollection["AccessMode"].Value; }
-            set { m_comp.SetComponentProperty("AccessMode", value.GetHashCode()); ReinitializeMetaData(); } 
+            set { m_comp.SetComponentProperty("AccessMode", value.GetHashCode()); ReinitializeMetaData(); }
         }
 
         public override void ReinitializeMetaDataNoCast()
@@ -1049,58 +1049,58 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             base.ReinitializeMetaDataNoCast();
         }
 
-        public string SqlCommand 
+        public string SqlCommand
         {
             get { return (string)m_meta.CustomPropertyCollection["SqlCommand"].Value; }
-            set 
+            set
             {
                 if (AccessMode != AccessMode.AM_SQLCOMMAND && AccessMode != AccessMode.AM_SQLCOMMAND_VARIABLE)
                     m_comp.SetComponentProperty("AccessMode", AccessMode.AM_SQLCOMMAND.GetHashCode());
-                m_comp.SetComponentProperty("SqlCommand", value); ReinitializeMetaData(); 
-            } 
+                m_comp.SetComponentProperty("SqlCommand", value); ReinitializeMetaData();
+            }
         }
 
         public string Table
         {
             get { return (string)m_meta.CustomPropertyCollection["OpenRowset"].Value; }
-            set 
-            { 
+            set
+            {
                 if (AccessMode == AccessMode.AM_SQLCOMMAND || AccessMode == AccessMode.AM_SQLCOMMAND_VARIABLE)
                     m_comp.SetComponentProperty("AccessMode", AccessMode.AM_OPENROWSET.GetHashCode());
-                m_comp.SetComponentProperty("OpenRowset", value); ReinitializeMetaData(); 
-            } 
+                m_comp.SetComponentProperty("OpenRowset", value); ReinitializeMetaData();
+            }
         }
 
         //Paul Rizza - https://blogs.msdn.microsoft.com/paulrizza/2014/07/14/ssis-2012-ezapi-basic-intro/
         public string SQLCommandVariable
         {
             get { return (string)m_meta.CustomPropertyCollection["SqlCommandVariable"].Value; }
-            set 
+            set
             {
                 if (AccessMode != AccessMode.AM_SQLCOMMAND_VARIABLE) { m_comp.SetComponentProperty("AccessMode", AccessMode.AM_SQLCOMMAND_VARIABLE.GetHashCode()); }
-                m_comp.SetComponentProperty("SqlCommandVariable", Parent.Variables[value].QualifiedName); 
-                ReinitializeMetaData(); 
-            } 
+                m_comp.SetComponentProperty("SqlCommandVariable", Parent.Variables[value].QualifiedName);
+                ReinitializeMetaData();
+            }
         }
 
 
         public string DataSourceVariable
         {
             get { return (string)m_meta.CustomPropertyCollection["OpenRowsetVariable"].Value; }
-            set { m_comp.SetComponentProperty("OpenRowsetVariable", value); ReinitializeMetaData(); } 
+            set { m_comp.SetComponentProperty("OpenRowsetVariable", value); ReinitializeMetaData(); }
         }
 
         public int DefaultCodePage
         {
             get { return (int)m_meta.CustomPropertyCollection["DefaultCodePage"].Value; }
-            set { m_comp.SetComponentProperty("DefaultCodePage", value); } 
+            set { m_comp.SetComponentProperty("DefaultCodePage", value); }
         }
     }
 
     [CompID("Microsoft.OLEDBSource")]
     public class EzOleDbSource : EzOleDbAdapter
     {
-        public EzOleDbSource(EzDataFlow dataFlow) : base(dataFlow)	{ }
+        public EzOleDbSource(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzOleDbSource(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
     }
 
@@ -1139,7 +1139,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     [CompID("Microsoft.FlatFileSource")]
     public class EzFlatFileSource : EzAdapter
     {
-        public EzFlatFileSource(EzDataFlow dataFlow) : base(dataFlow)	{ }
+        public EzFlatFileSource(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzFlatFileSource(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
 
         protected override void VerifyConnection()
@@ -1148,7 +1148,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 throw new IncorrectAssignException(string.Format("Cannot assign {0} connection to EzFlatFileSource", m_connection.CM.CreationName));
         }
 
-        public bool RetainNulls 
+        public bool RetainNulls
         {
             get { return (bool)Meta.CustomPropertyCollection["RetainNulls"].Value; }
             set { Comp.SetComponentProperty("RetainNulls", value); }
@@ -1163,7 +1163,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     [CompID("Microsoft.FlatFileDestination")]
     public class EzFlatFileDestination : EzAdapter
     {
-        public EzFlatFileDestination(EzDataFlow dataFlow) : base(dataFlow)	{ }
+        public EzFlatFileDestination(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzFlatFileDestination(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
 
         protected override void VerifyConnection()
@@ -1218,7 +1218,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 fc.DataType = c.DataType;
                 fc.DataPrecision = c.Precision;
                 fc.DataScale = c.Scale;
-                
+
                 switch (c.DataType)
                 {
                     case DataType.DT_NTEXT:
@@ -1355,8 +1355,8 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     public class EzMultiCast : EzComponent
     {
         public static string CompID { get { return "Microsoft.Multicast"; } }
-        public EzMultiCast(EzDataFlow dataFlow) : base(dataFlow)	{ }        
-        public EzMultiCast(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }  
+        public EzMultiCast(EzDataFlow dataFlow) : base(dataFlow) { }
+        public EzMultiCast(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
     }
 
     //DEMO - Paul Rizza - https://blogs.msdn.microsoft.com/paulrizza/2014/07/14/ssis-2012-ezapi-basic-intro/
@@ -1437,33 +1437,33 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     Meta.InputCollection[0].InputColumnCollection.RemoveObjectByID(c.ID);
                     break;
                 }
-                
+
             }
         }
-        
+
 
         private ColumnCustomPropertyIndexer<string> m_exprIndexer;
-        public ColumnCustomPropertyIndexer<string> Expression 
-        { 
-            get 
-            { 
+        public ColumnCustomPropertyIndexer<string> Expression
+        {
+            get
+            {
                 if (m_exprIndexer == null)
-                    m_exprIndexer = new ColumnCustomPropertyIndexer<string>(this, "FriendlyExpression", IndexerType.Both, true); 
-                return m_exprIndexer; 
-            } 
+                    m_exprIndexer = new ColumnCustomPropertyIndexer<string>(this, "FriendlyExpression", IndexerType.Both, true);
+                return m_exprIndexer;
+            }
         }
     }
-       
+
 
     [Flags]
     public enum SortComparisonFlags : uint
     {
-        StringSort     = 0x00000000,
-        IgnoreCase     = 0x00000001,
+        StringSort = 0x00000000,
+        IgnoreCase = 0x00000001,
         IgnoreNonSpace = 0x00000002,
-        IgnoreSymbols  = 0x00000004,
+        IgnoreSymbols = 0x00000004,
         IgnoreKanaType = 0x00010000,
-        IgnoreWidth    = 0x00020000
+        IgnoreWidth = 0x00020000
     }
 
     public class PassThroughIndexer
@@ -1539,14 +1539,14 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         }
 
         private PassThroughIndexer m_passThrough;
-        public PassThroughIndexer PassThrough 
-        { 
-            get 
-            { 
+        public PassThroughIndexer PassThrough
+        {
+            get
+            {
                 if (m_passThrough == null)
                     m_passThrough = new PassThroughIndexer(this);
                 return m_passThrough;
-            } 
+            }
         }
 
         public override void ReinitializeMetaDataNoCast()
@@ -1669,13 +1669,14 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             catch { }
         }
 
-        public bool TreatDuplicateKeysAsError 
+        public bool TreatDuplicateKeysAsError
         {
             get { return (bool)Meta.CustomPropertyCollection["TreatDuplicateKeysAsError"].Value; }
             set { SetComponentProperty("TreatDuplicateKeysAsError", value); }
         }
 
-        public CacheType CacheType {
+        public CacheType CacheType
+        {
             get { return (CacheType)Meta.CustomPropertyCollection["CacheType"].Value; }
             set { SetComponentProperty("CacheType", value); }
         }
@@ -1733,7 +1734,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         public ConnectionType ConnectionType
         {
             get { return (ConnectionType)Meta.CustomPropertyCollection["ConnectionType"].Value; }
-            set 
+            set
             {
                 if (value == ConnectionType)
                     return;
@@ -1760,15 +1761,15 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected EzOleDbConnectionManager m_oledbConn;
         public EzOleDbConnectionManager OleDbConnection
         {
-            get 
+            get
             {
                 if (m_oledbConn == null)
                 {
                     IDTSRuntimeConnection100 rtCnn = m_meta.RuntimeConnectionCollection["OleDbConnection"];
                     if (rtCnn != null)
                         m_oledbConn = new EzOleDbConnectionManager(Parent.Package, Parent.Package.Connections[rtCnn.ConnectionManagerID]);
-                 }
-                return m_oledbConn; 
+                }
+                return m_oledbConn;
             }
             set
             {
@@ -1785,7 +1786,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected EzCacheCM m_cacheConn;
         public EzCacheCM CacheConnection
         {
-            get 
+            get
             {
                 if (m_cacheConn == null)
                 {
@@ -1793,7 +1794,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     if (rtCnn != null)
                         m_cacheConn = new EzCacheCM(Parent.Package, Parent.Package.Connections[rtCnn.ConnectionManagerID]);
                 }
-                return m_cacheConn; 
+                return m_cacheConn;
             }
             set
             {
@@ -1836,7 +1837,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         }
 
         protected ColumnCustomPropertyIndexer<string> m_join;
-        public ColumnCustomPropertyIndexer<string> Join 
+        public ColumnCustomPropertyIndexer<string> Join
         {
             get
             {
@@ -1865,7 +1866,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             foreach (string s in cols)
             {
-                string[] c = s.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                string[] c = s.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 Join[c[0]] = c[1];
             }
         }
@@ -1878,10 +1879,10 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             foreach (string s in cols)
             {
-                string[] c = s.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                string[] c = s.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 LookUp[c[0]] = c[1];
                 Join[c[0]] = c[1];
-             }
+            }
         }
 
         /// <summary>
@@ -1902,7 +1903,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             foreach (string s in cols)
             {
-                string[] c = s.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                string[] c = s.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 LookUp[c[0]] = c[1];
             }
         }
@@ -1913,11 +1914,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     {
         public EzCacheTransform(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzCacheTransform(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
-        
+
         protected EzCacheCM m_conn;
         public EzCacheCM Connection
         {
-            get 
+            get
             {
                 if (m_conn == null)
                 {
@@ -1925,7 +1926,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     if (rtCnn != null)
                         m_conn = new EzCacheCM(Parent.Package, Parent.Package.Connections[rtCnn.ConnectionManagerID]);
                 }
-                return m_conn; 
+                return m_conn;
             }
             set
             {
@@ -2028,7 +2029,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 if (!VirtualInputColumnExists(cols[colName].InputColName))
                     continue;
                 Convert(cols[colName].InputColName, colName, cols[colName].DataType, cols[colName].Length,
-                    cols[colName].Precision, cols[colName].Scale, cols[colName].CodePage); 
+                    cols[colName].Precision, cols[colName].Scale, cols[colName].CodePage);
             }
         }
 
@@ -2102,7 +2103,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public AggrFunc this[int outputInd, string inputColName, string outputColName]
         {
-            get 
+            get
             {
                 if (string.IsNullOrEmpty(outputColName))
                     outputColName = inputColName;
@@ -2117,8 +2118,8 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             {
                 if (string.IsNullOrEmpty(outputColName))
                     outputColName = inputColName;
-                    m_obj.SetOutputColumnProperty(outputInd, outputColName, "AggregationColumnId", (inputColName == "*" && value == AggrFunc.CountAll) ? 
-                        0 : m_obj.InputCol(inputColName).LineageID, false);
+                m_obj.SetOutputColumnProperty(outputInd, outputColName, "AggregationColumnId", (inputColName == "*" && value == AggrFunc.CountAll) ?
+                    0 : m_obj.InputCol(inputColName).LineageID, false);
                 m_obj.SetOutputColumnProperty(outputInd, outputColName, "AggregationType", value, reinit);
             }
         }
@@ -2252,7 +2253,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 set { obj.host.PutBinaryCode(asmName, value); }
             }
         }
-       
+
         public EzScript(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzScript(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
 
@@ -2262,7 +2263,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             get
             {
-                return host.CurrentScriptingEngine; 
+                return host.CurrentScriptingEngine;
             }
         }
 
@@ -2283,7 +2284,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (string)Meta.CustomPropertyCollection["ScriptLanguage"].Value; }
             set { SetComponentProperty("ScriptLanguage", value); }
         }
-        
+
         public string ProjectName
         {
             get { return (string)Meta.CustomPropertyCollection["VSTAProjectName"].Value; }
@@ -2376,7 +2377,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 ScriptingEngine.DisposeVstaHelper();
             }
         }
-         
+
         public bool Build()
         {
             try
@@ -2443,14 +2444,14 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public string XMLDataSource
         {
-            get 
+            get
             {
                 string propName = "XMLData";
                 if (AccessMode != XMLAccessMode.FileFromLocation)
                     propName = "XMLDataVariable";
-                return (string)Meta.CustomPropertyCollection[propName].Value; 
+                return (string)Meta.CustomPropertyCollection[propName].Value;
             }
-            set 
+            set
             {
                 string propName = "XMLData";
                 if (AccessMode != XMLAccessMode.FileFromLocation)
@@ -2517,7 +2518,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 string prevInCol = this[i];
                 // If there exists a column in input i already mapped to the output column,
                 //  then remove the input-to-output column mapping.
-                if (prevInCol != null) 
+                if (prevInCol != null)
                     m_obj.InputCol(i, prevInCol).CustomPropertyCollection["OutputColumnLineageID"].Value = 0;
                 if (value == null)
                     return;
@@ -2613,7 +2614,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     {
         public EzUnionAndMergeBase(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzUnionAndMergeBase(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
-        
+
         private ColumnMapper m_map;
         public ColumnMapper Map
         {
@@ -2634,7 +2635,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public override void ReinitializeMetaDataNoCast()
         {
-            for (int i = Meta.OutputCollection[0].OutputColumnCollection.Count - 1; i >= 0; --i )
+            for (int i = Meta.OutputCollection[0].OutputColumnCollection.Count - 1; i >= 0; --i)
             {
                 string colName = Meta.OutputCollection[0].OutputColumnCollection[i].Name;
                 // If there is no mapping to this output column, then remove it.
@@ -2655,7 +2656,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     }
 
     [CompID("Microsoft.Merge")]
-    public class EzMerge: EzUnionAndMergeBase
+    public class EzMerge : EzUnionAndMergeBase
     {
         public EzMerge(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzMerge(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }
@@ -2737,7 +2738,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 }
             }
         }
-        
+
         /*
          * Replaces all instances of column names in the first input with their lineage ids
          */
@@ -2758,11 +2759,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         private uint GetNextOrder()
         {
             uint numberFriendlyExpressions = 0;
-            foreach(IDTSOutput100 output in m_obj.Meta.OutputCollection)
+            foreach (IDTSOutput100 output in m_obj.Meta.OutputCollection)
             {
-                foreach(IDTSCustomProperty100 prop in output.CustomPropertyCollection)
+                foreach (IDTSCustomProperty100 prop in output.CustomPropertyCollection)
                 {
-                    if(prop.Name == friendly_propname)
+                    if (prop.Name == friendly_propname)
                     {
                         numberFriendlyExpressions++;
                     }
@@ -2806,7 +2807,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 return m_expression;
             }
         }
-        
+
         /*
          * Indexes over outputs to get/set the order in which expressions are evaluated.
          */
@@ -2865,7 +2866,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         public MergeJoinType JoinType
         {
             get { return (MergeJoinType)Meta.CustomPropertyCollection["JoinType"].Value; }
-            set { SetComponentProperty("JoinType", value.GetHashCode());}
+            set { SetComponentProperty("JoinType", value.GetHashCode()); }
         }
 
         public int MaxBuffersPerInput
@@ -2942,7 +2943,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     }
 
     // Indices of outputs of slowly changing dimention. These indices are fixed
-    public enum SCDOutput: int
+    public enum SCDOutput : int
     {
         Unchanged = 0,
         New = 1,
@@ -2984,7 +2985,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (bool)Meta.CustomPropertyCollection["EnableInferredMember"].Value; }
             set { Comp.SetComponentProperty("EnableInferredMember", value); }
         }
-        
+
         public string InferredMemberIndicator
         {
             get { return (string)Meta.CustomPropertyCollection["InferredMemberIndicator"].Value; }
@@ -3008,7 +3009,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (SCDRowChangeType)Meta.CustomPropertyCollection["SqlCommand"].Value; }
             set { Comp.SetComponentProperty("SqlCommand", value.GetHashCode()); }
         }
-        
+
         public string SqlCommand
         {
             get { return (string)Meta.CustomPropertyCollection["SqlCommand"].Value; }
@@ -3034,7 +3035,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     }
 
     [CompID("Microsoft.SQLServerDestination")]
-    public class EzSqlDestination: EzAdapter
+    public class EzSqlDestination : EzAdapter
     {
         public EzSqlDestination(EzDataFlow dataFlow) : base(dataFlow) { }
         public EzSqlDestination(EzDataFlow parent, IDTSComponentMetaData100 meta) : base(parent, meta) { }

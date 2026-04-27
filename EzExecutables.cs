@@ -55,7 +55,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected EzPackage m_pkg;
         protected Executable m_exec;
         protected EzContainer m_parent;
-        public EzContainer Parent { get {return m_parent; } }
+        public EzContainer Parent { get { return m_parent; } }
         public EzPackage Package { get { return m_pkg; } }
 
         public string GetExecID()
@@ -83,7 +83,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 end = ezdesc.Length;
             return ezdesc.Substring(start, end - start) == ezname;
         }
-        
+
         public virtual EzExecutable Assign(EzContainer parent, Executable e)
         {
             if (e == null)
@@ -146,20 +146,20 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             }
         }
 
-        public static implicit operator Executable(EzExecutable e) 
+        public static implicit operator Executable(EzExecutable e)
         {
             if (e == null)
                 return null;
-            return e.m_exec; 
+            return e.m_exec;
         }
 
-        public EzExecutable(EzContainer parent, Executable e) 
-        { 
+        public EzExecutable(EzContainer parent, Executable e)
+        {
             Assign(parent, e);
             if (parent != null)
                 parent.m_ezexecs.Add(this);
         }
-        
+
         public EzExecutable(EzContainer parent)
         {
             EzPackage cur = this as EzPackage;
@@ -174,9 +174,9 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 parent.m_ezexecs.Add(this);
         }
 
-        public string ID 
-        { 
-            get 
+        public string ID
+        {
+            get
             {
                 TaskHost th = m_exec as TaskHost;
                 if (th != null)
@@ -189,7 +189,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     else
                         return null;
                 }
-            } 
+            }
         }
 
         protected virtual Executable CreateExecutable()
@@ -217,7 +217,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         }
     }
 
-    public class EzContainer: EzExecutable
+    public class EzContainer : EzExecutable
     {
         protected Executables m_execs;
         protected DtsContainer host { get { return (DtsContainer)m_exec; } }
@@ -259,7 +259,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     {
                         if (((e is TaskHost) && CompareEzDescription((e as TaskHost).Description, mi.Name)) ||
                             ((e is DtsContainer) && CompareEzDescription((e as DtsContainer).Description, mi.Name)))
-                        { 
+                        {
                             if (cur == null)
                             {
                                 cur = Activator.CreateInstance(mi.FieldType, new object[] { c, e });
@@ -320,16 +320,17 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         public EzContainer(EzContainer parent, DtsContainer c) : base(parent, (Executable)c) { }
         public EzContainer(EzContainer parent) : base(parent) { RecreateExecutables(); }
 
-        public static implicit operator DtsContainer(EzContainer c) 
+        public static implicit operator DtsContainer(EzContainer c)
         {
             if (c == null)
                 return null;
-            return (DtsContainer)c.m_exec; 
+            return (DtsContainer)c.m_exec;
         }
 
-        public string Description { 
-            get { return GetEzDescription(host.Description); } 
-            set { host.Description = string.Format("<EzName>{0}</EzName>{1}", EzName, value); } 
+        public string Description
+        {
+            get { return GetEzDescription(host.Description); }
+            set { host.Description = string.Format("<EzName>{0}</EzName>{1}", EzName, value); }
         }
 
         public string Name { get { return host.Name; } set { host.Name = value; } }
@@ -415,7 +416,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public void SetExpression(string property, string expression)
         {
-            props[property].SetExpression(m_exec,expression);
+            props[property].SetExpression(m_exec, expression);
         }
     }
 
@@ -543,8 +544,8 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
     ///<summary>
     ///This is a base package class to use when dynamically constructing packages 
     ///</summary>
-	public class EzPackage: EzContainer
-	{
+	public class EzPackage : EzContainer
+    {
         public EzPackage() : base((EzContainer)null) { }
         public EzPackage(Package p) : base(null, (DtsContainer)p) { }
 
@@ -579,27 +580,27 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             return new Package();
         }
 
-        public static implicit operator Package(EzPackage p) 
+        public static implicit operator Package(EzPackage p)
         {
             if (p == null)
                 return null;
-            p.SetEzNames(); 
-            return (Package)p.m_exec; 
+            p.SetEzNames();
+            return (Package)p.m_exec;
         }
 
-        public static implicit operator EzPackage(Package p) 
+        public static implicit operator EzPackage(Package p)
         {
             if (p == null)
                 return null;
-            return new EzPackage(p); 
+            return new EzPackage(p);
         }
 
         public Connections Connections { get { return (m_exec as Package).Connections; } }
         //public PrecedenceConstraints PrecedenceConstraints { get { return (m_exec as Package).PrecedenceConstraints; } }
-    
+
         public bool ConnectionExists(string name)
         {
-	    foreach (ConnectionManager cm in ((Package)m_exec).Connections)
+            foreach (ConnectionManager cm in ((Package)m_exec).Connections)
                 if (cm.Name == name)
                     return true;
             return false;
@@ -607,9 +608,9 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public DTSExecResult Execute() { return (m_exec as Package).Execute(); }
         public DTSExecResult Execute(IDTSEvents events) { return (m_exec as Package).Execute(null, null, events, null, null); }
-        public DTSExecResult Execute(Connections connections, Variables variables, IDTSEvents events, IDTSLogging log, object transaction) 
-        { 
-            return (m_exec as Package).Execute(connections, variables, events, log, transaction); 
+        public DTSExecResult Execute(Connections connections, Variables variables, IDTSEvents events, IDTSLogging log, object transaction)
+        {
+            return (m_exec as Package).Execute(connections, variables, events, log, transaction);
         }
 
         public void SaveToFile(string fileName)
@@ -670,7 +671,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (m_exec as Package).EnableConfigurations; }
             set { (m_exec as Package).EnableConfigurations = value; }
         }
-       
+
         public DtsEventHandlers EventHandlers
         {
             get { return (m_exec as Package).EventHandlers; }
@@ -694,18 +695,18 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         }
     }
 
-    public class EzTask: EzExecutable
+    public class EzTask : EzExecutable
     {
         private EzExpressionIndexer m_exprIndexer;
-        protected TaskHost host { get {return (TaskHost)m_exec; } }
-        
-        public static implicit operator TaskHost(EzTask t) 
+        protected TaskHost host { get { return (TaskHost)m_exec; } }
+
+        public static implicit operator TaskHost(EzTask t)
         {
             if (t == null)
                 return null;
-            return (TaskHost)t.m_exec; 
+            return (TaskHost)t.m_exec;
         }
-        
+
         public EzTask(EzContainer parent) : base(parent) { }
         public EzTask(EzContainer parent, TaskHost t) : base(parent, (Executable)t) { }
 
@@ -715,23 +716,23 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             set { host.Description = string.Format("<EzName>{0}</EzName>{1}", EzName, value); }
         }
 
-        public string Name { get { return host.Name; } set {host.Name = value; } }
+        public string Name { get { return host.Name; } set { host.Name = value; } }
         public DTSExecResult ExecutionResult { get { return host.ExecutionResult; } }
         public string CreationName { get { return host.CreationName; } }
         public DTSExecStatus ExecutionStatus { get { return host.ExecutionStatus; } }
         public int ExecutionDuration { get { return host.ExecutionDuration; } }
         public object ExecutionValue { get { return host.ExecutionValue; } }
         public bool FailPackageOnFailure { get { return host.FailPackageOnFailure; } }
-        public DTSForcedExecResult ForceExecutionResult { get {return host.ForceExecutionResult; } set { host.ForceExecutionResult = value; } }
+        public DTSForcedExecResult ForceExecutionResult { get { return host.ForceExecutionResult; } set { host.ForceExecutionResult = value; } }
         public bool ForceExecutionValue { get { return host.ForceExecutionValue; } set { host.ForceExecutionValue = value; } }
         public object ForcedExecutionValue { get { return host.ForcedExecutionValue; } set { host.ForcedExecutionValue = value; } }
         public bool IsDefaultLocaleID { get { return host.IsDefaultLocaleID; } }
-        public int LocaleID { get {return host.LocaleID; } set { host.LocaleID = value; } }
+        public int LocaleID { get { return host.LocaleID; } set { host.LocaleID = value; } }
         public string PackagePath { get { return host.GetPackagePath(); } }
-        public DTSLoggingMode LoggingMode { get { return host.LoggingMode; } set {host.LoggingMode = value; } }
+        public DTSLoggingMode LoggingMode { get { return host.LoggingMode; } set { host.LoggingMode = value; } }
         public LoggingOptions LoggingOptions { get { return host.LoggingOptions; } }
         public int MaxErrorCount { get { return host.MaximumErrorCount; } set { host.MaximumErrorCount = value; } }
-        public LogEntryInfos LogEntryInfos {get { return host.LogEntryInfos; } }
+        public LogEntryInfos LogEntryInfos { get { return host.LogEntryInfos; } }
         public Variables Variables { get { return host.Variables; } }
         public bool Disable { get { return host.Disable; } set { host.Disable = value; } }
         public void SetExpression(string property, string expression)
@@ -745,20 +746,20 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             set { host.DelayValidation = value; }
         }
 
-        public DTSTransactionOption TransactionOption 
+        public DTSTransactionOption TransactionOption
         {
             get { return host.TransactionOption; }
             set { host.TransactionOption = value; }
         }
 
-        public EzExpressionIndexer Expression 
-        { 
-            get 
+        public EzExpressionIndexer Expression
+        {
+            get
             {
                 if (m_exprIndexer == null)
                     m_exprIndexer = new EzExpressionIndexer(this);
                 return m_exprIndexer;
-            } 
+            }
         }
     }
 
@@ -864,25 +865,25 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (uint)host.Properties["TimeOut"].GetValue(host); }
             set { host.Properties["TimeOut"].SetValue(host, value); }
         }
-        
+
         public uint CodePage
         {
             get { return (uint)host.Properties["CodePage"].GetValue(host); }
             set { host.Properties["CodePage"].SetValue(host, value); }
         }
-     
+
 
         public ResultSetType ResultSetType
         {
             get { return (ResultSetType)host.Properties["ResultSetType"].GetValue(host); }
             set { host.Properties["ResultSetType"].SetValue(host, value); }
         }
-        
+
         protected EzConnectionManager m_connection;
         public EzConnectionManager Connection
         {
             get { return m_connection; }
-            set 
+            set
             {
                 if (value == null)
                 {
@@ -916,7 +917,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (string)host.Properties["SqlStatementSource"].GetValue(host); }
             set { host.Properties["SqlStatementSource"].SetValue(host, value); }
         }
-    
+
 
         public bool BypassPrepare
         {
@@ -943,8 +944,8 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
 
         public EzDataFlow(EzContainer parent) : base(parent) { }
         public EzDataFlow(EzContainer parent, TaskHost pipe) : base(parent, pipe) { }
-        
-        public MainPipe DataFlow { get { return (MainPipe)host.InnerObject;  } }
+
+        public MainPipe DataFlow { get { return (MainPipe)host.InnerObject; } }
 
         public bool AutoAdjustBufferSize
         {
@@ -955,11 +956,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         public void DeleteComponent(int ID)
         {
             for (int i = 0; i < Components.Count; i++)
-               if (Components[i].ID == ID)
-               {
-                   m_components.RemoveAt(i);
-                   break;
-               }
+                if (Components[i].ID == ID)
+                {
+                    m_components.RemoveAt(i);
+                    break;
+                }
             DataFlow.ComponentMetaDataCollection.RemoveObjectByID(ID);
         }
 
@@ -1065,7 +1066,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     continue;
                 foreach (EzComponent e in Components)
                     if (e.Meta.ID == p.EndPoint.Component.ID)
-                         ReinitializeMetaData(e);
+                        ReinitializeMetaData(e);
             }
         }
 
@@ -1093,11 +1094,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         protected string m_networkFileShare;
 
         public DBFile(EzTransferDBTask obj, string file, string folder, string netShare)
-        { 
+        {
             m_obj = obj;
-            m_file = (file == null)? "" : file;
-            m_folder = (folder == null)? "" : folder;
-            m_networkFileShare = (netShare == null)? "": netShare;
+            m_file = (file == null) ? "" : file;
+            m_folder = (folder == null) ? "" : folder;
+            m_networkFileShare = (netShare == null) ? "" : netShare;
         }
 
         public string File { get { return m_file; } }
@@ -1107,7 +1108,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             get
             {
-                    return m_networkFileShare;
+                return m_networkFileShare;
             }
             set
             {
@@ -1115,7 +1116,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 m_obj.UpdateDbFileListProperty(true);
             }
         }
-    } 
+    }
 
 
     public class DestDBFile : DBFile
@@ -1232,10 +1233,10 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             set { host.Properties["SourceDatabaseName"].SetValue(host, value); ReinitializeSrcDbFileList(); }
         }
 
-        
+
 
         List<DBFile> m_sourceDatabaseFiles = new List<DBFile>();
-        public ReadOnlyCollection<DBFile> SourceDatabaseFiles 
+        public ReadOnlyCollection<DBFile> SourceDatabaseFiles
         {
             get { return new ReadOnlyCollection<DBFile>(m_sourceDatabaseFiles); }
         }
@@ -1260,10 +1261,10 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 string value = GetStringValueOfDbFilesProperty(m_DestDatabaseFiles);
                 host.Properties["DestinationDatabaseFiles"].SetValue(host, value);
             }
-   
+
         }
-        
-        internal string GetStringValueOfDbFilesProperty<T> (List<T> collection) where T: DBFile 
+
+        internal string GetStringValueOfDbFilesProperty<T>(List<T> collection) where T : DBFile
         {
             string value = "";
             foreach (DBFile dbFile in collection)
@@ -1271,7 +1272,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 if (SrcDBMethod == TransferMethod.DatabaseOffline)
                     value += String.Format("\"{0}\",\"{1}\",\"{2}\";", dbFile.File, dbFile.Folder, dbFile.NetworkFileShare);
                 else
-                    value += String.Format("\"{0}\",\"{1}\",\"\";", dbFile.File, dbFile.Folder);     
+                    value += String.Format("\"{0}\",\"{1}\",\"\";", dbFile.File, dbFile.Folder);
             }
 
             return value;
@@ -1281,7 +1282,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         private void FillOutSourceDBFiles()
         {
             SMO.Server smoServer = null;
-            
+
             if ((ConnectionManager)m_srcconnection == null)
             {
                 throw new ExecutableException("The source connection is not specified");
@@ -1291,7 +1292,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             {
                 throw new ExecutableException("The source database name is not specified"); ;
             }
-            else 
+            else
             {
                 try
                 {
@@ -1333,9 +1334,9 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     }
                 }
             }
-           
+
         }
-        
+
 
         /// <summary>
         /// creates and add a row to the grid for the specified fileName
@@ -1344,7 +1345,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         {
             DBFile dbFile = new DBFile(this, Path.GetFileName(fullFileName), Path.GetDirectoryName(fullFileName), "");
             m_sourceDatabaseFiles.Add(dbFile);
-        }        
+        }
     }
 
 
@@ -1378,11 +1379,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             get { return (string)host.Properties["WorkingDirectory"].GetValue(host); }
             set { host.Properties["WorkingDirectory"].SetValue(host, value); }
         }
-       
+
         public string StandarInputVariable
         {
             get { return (string)host.Properties["StandarInputVariable"].GetValue(host); }
-            set 
+            set
             {
                 if (host.Variables.Contains((string)value))
                     host.Properties["StandarInputVariable"].SetValue(host, value);
@@ -1398,7 +1399,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
             {
                 if (!host.Variables.Contains((string)value))
                     throw new ExecutableException(string.Format("The specified variable {0} does not exist!", (string)value));
-                host.Properties["StandarOutputVariable"].SetValue(host, value);                                   
+                host.Properties["StandarOutputVariable"].SetValue(host, value);
             }
         }
 
@@ -1434,10 +1435,10 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
         public bool TerminateProcessAfterTimeOut
         {
             get { return (bool)host.Properties["TerminateProcessAfterTimeOut"].GetValue(host); }
-            set 
+            set
             {
                 if (TimeOut != 0)
-                    host.Properties["TerminateProcessAfterTimeOut"].SetValue(host, value); 
+                    host.Properties["TerminateProcessAfterTimeOut"].SetValue(host, value);
             }
         }
 
@@ -1523,7 +1524,7 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                     throw new ExecutableException("The property \"IsDestinationPathVariable\" is set to false. Please specify a file connection manager for the DestinationConnection");
                 if (!host.Variables.Contains((string)value))
                     throw new ExecutableException(string.Format("The specified variable {0} does not exist!", (string)value));
-                host.Properties["Destination"].SetValue(host, value);          
+                host.Properties["Destination"].SetValue(host, value);
             }
         }
 
@@ -1535,11 +1536,11 @@ namespace Microsoft.SqlServer.SSIS.EzAPI
                 if (!IsSourcePathVariable)
                     throw new ExecutableException("The property \"IsSourcePathVariable\" is set to false. Please specify a file connection manager for the SourceConnection");
                 if (!host.Variables.Contains((string)value))
-                    throw new ExecutableException(string.Format("The specified variable {0} does not exist!", (string)value));                 
-                host.Properties["Source"].SetValue(host, value);    
+                    throw new ExecutableException(string.Format("The specified variable {0} does not exist!", (string)value));
+                host.Properties["Source"].SetValue(host, value);
             }
         }
-       
+
     }
 
 }
